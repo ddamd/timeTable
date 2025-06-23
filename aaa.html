@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson Countdown</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #eef6ff;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        #countdown {
+            font-size: 2.5em;
+            margin-top: 20px;
+            color: #1d4ed8;
+        }
+
+        #lesson {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1d4ed8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #2563eb;
+            }
+
+        #timetable {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: left;
+        }
+
+        .day-column {
+            background-color: #f3f4f6;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+            .day-column h3 {
+                margin-top: 0;
+                color: #1e3a8a;
+            }
+
+        .lesson {
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lesson Countdown</h1>
+    <div id="lesson">Detecting current lesson...</div>
+    <div id="countdown">--:--:--</div>
+
+    <button onclick="toggleTimetable()">Show Timetable</button>
+    <div id="timetable"></div>
+
+    <script>
+        const timetable = {
+            1: [{ start: "07:45", end: "9:30", subject: "NWTK" }, { start: "09:45", end: "10:35", subject: "INSY" }, { start: "10:40", end: "12:25", subject: "AM" }, { start: "13:25", end: "15:10", subject: "SYT" }, { start: "15:20", end: "17:05", subject: "VENG" }],
+            2: [{ start: "07:45", end: "09:30", subject: "ITP" }, { start: "09:45", end: "10:35", subject: "CFC" }, { start: "10:40", end: "11:30", subject: "ITSI" }, { start: "11:35", end: "13:20", subject: "D" }, { start: "14:20", end: "16:10", subject: "MEDT" }, { start: "16:15", end: "17:05", subject: "RK" }],
+            3: [{ start: "07:45", end: "09:30", subject: "SEW" }, { start: "09:45", end: "10:35", subject: "MEDT" }, { start: "11:35", end: "12:25", subject: "E" }, { start: "12:30", end: "13:20", subject: "AM" }, { start: "14:20", end: "15:10", subject: "GGP" }, { start: "15:20", end: "16:10", subject: "NW2 IRNN" }, { start: "16:15", end: "17:05", subject: "NW2 EICK" }],
+            4: [{ start: "07:45", end: "09:30", subject: "MEES" }, { start: "09:45", end: "11:30", subject: "BESP" }, { start: "12:30", end: "14:15", subject: "INSY" }, { start: "14:20", end: "15:10", subject: "NWTK" }, { start: "15:20", end: "16:10", subject: "GGP" }],
+            5: [{ start: "07:45", end: "09:30", subject: "SYT" }, { start: "09:45", end: "10:35", subject: "E" }, { start: "10:40", end: "11:30", subject: "MAXB" }]
+        };
+
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        function updateCountdown() {
+            const now = new Date();
+            const day = now.getDay();
+            const todaySchedule = timetable[day];
+
+            if (!todaySchedule) {
+                document.getElementById("lesson").textContent = "No lessons scheduled today.";
+                document.getElementById("countdown").textContent = "--:--:--";
+                return;
+            }
+
+            let found = false;
+
+            for (const lesson of todaySchedule) {
+                const [sh, sm] = lesson.start.split(":").map(Number);
+                const [eh, em] = lesson.end.split(":").map(Number);
+                const start = new Date(now); start.setHours(sh, sm, 0, 0);
+                const end = new Date(now); end.setHours(eh, em, 0, 0);
+
+                if (now >= start && now <= end) {
+                    const diff = end - now;
+                    const hrs = Math.floor(diff / (1000 * 60 * 60));
+                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    document.getElementById("lesson").textContent = `Current lesson: ${lesson.subject} (ends at ${lesson.end})`;
+                    document.getElementById("countdown").textContent =
+                        `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                document.getElementById("lesson").textContent = "No current lesson.";
+                document.getElementById("countdown").textContent = "--:--:--";
+            }
+        }
+
+        function toggleTimetable() {
+            const container = document.getElementById("timetable");
+            if (container.style.display === "none" || container.style.display === "") {
+                container.innerHTML = `<div class="grid"></div>`;
+                const grid = container.querySelector(".grid");
+
+                for (let d = 1; d <= 5; d++) {
+                    const lessons = timetable[d];
+                    const dayDiv = document.createElement("div");
+                    dayDiv.className = "day-column";
+
+                    const dayTitle = document.createElement("h3");
+                    dayTitle.textContent = dayNames[d];
+                    dayDiv.appendChild(dayTitle);
+
+                    for (const l of lessons) {
+                        const lesson = document.createElement("div");
+                        lesson.className = "lesson";
+                        lesson.textContent = `${l.start} - ${l.end}: ${l.subject}`;
+                        dayDiv.appendChild(lesson);
+                    }
+
+                    grid.appendChild(dayDiv);
+                }
+
+                container.style.display = "block";
+            } else {
+                container.style.display = "none";
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
