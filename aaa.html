@@ -80,6 +80,11 @@
         border-radius: 10px;
         transition: width 1s linear;
     }
+
+    /* Video box */
+    #videoBox {
+        margin-top: 30px;
+    }
 </style>
 </head>
 <body>
@@ -94,6 +99,8 @@
 
     <button onclick="toggleTimetable()">📅 Show Timetable</button>
     <div id="timetable"></div>
+
+    <div id="videoBox"></div>
 
     <script>
         const timetable = {
@@ -114,6 +121,19 @@
             "🥱 ICH BIN DURCH MIM LEBEN",
             "🍫 Lizards sind suppi :)",
             "🦆 Quack attack incoming!"
+        ];
+
+        const videos = [
+            "dQw4w9WgXcQ", // Just Dance
+            "qrO4YZeyl0I", // Bad Romance
+            "bESGLojNYSo", // Poker Face
+            "niqrrmev4mA", // Paparazzi
+            "EVBsypHzF3U", // Alejandro
+            "Ums9B1mhw9k", // Born This Way
+            "wV1FrqwZyKw", // The Edge of Glory
+            "oP8SrlbpJ5A", // Applause
+            "En2D_5TzXCA", // Stupid Love
+            "oB94lvJbETE"  // Rain on Me
         ];
 
         function updateCountdown() {
@@ -204,6 +224,18 @@
             }
         }
 
+        function loadRandomVideo() {
+            const vid = videos[Math.floor(Math.random() * videos.length)];
+            document.getElementById("videoBox").innerHTML =
+                `<iframe width="560" height="315" 
+                    src="https://www.youtube.com/embed/${vid}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>`;
+        }
+
+        loadRandomVideo();
         setInterval(updateCountdown, 1000);
     </script>
 </body>
