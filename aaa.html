@@ -1,107 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Lesson Countdown</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #eef6ff;
-            text-align: center;
-            padding: 50px;
-        }
+<meta charset="UTF-8">
+<title>Lesson Countdown</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe, #93c5fd);
+        background-size: 400% 400%;
+        animation: gradientShift 20s ease infinite;
+        text-align: center;
+        padding: 50px;
+        color: #1e3a8a;
+    }
 
-        h1 {
-            font-size: 2em;
-        }
+    @keyframes gradientShift {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
 
-        #countdown {
-            font-size: 2.5em;
-            margin-top: 20px;
-            color: #1d4ed8;
-        }
+    h1 { font-size: 2.5em; margin-bottom: 10px; }
 
-        #lesson {
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
+    #countdown {
+        font-size: 3em;
+        margin-top: 20px;
+        color: #1d4ed8;
+        font-family: 'Courier New', monospace;
+        text-shadow: 0 0 8px rgba(29,78,216,0.5);
+    }
 
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #1d4ed8;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    #lesson { font-size: 1.3em; margin-top: 10px; }
+    #funny { margin-top: 15px; font-style: italic; color: #2563eb; }
 
-            button:hover {
-                background-color: #2563eb;
-            }
+    button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    button:hover { transform: scale(1.05); background: linear-gradient(90deg, #2563eb, #60a5fa); }
 
-        #timetable {
-            display: none;
-            margin-top: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    #timetable {
+        display: none;
+        margin-top: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            text-align: left;
-        }
-
-        .day-column {
-            background-color: #f3f4f6;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-            .day-column h3 {
-                margin-top: 0;
-                color: #1e3a8a;
-            }
-
-        .lesson {
-            font-size: 0.9em;
-            margin: 5px 0;
-        }
-    </style>
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; }
+    .day-column { background-color: #f9fafb; padding: 12px; border-radius: 10px; }
+    .day-column h3 { margin-top: 0; color: #1e40af; }
+    .lesson { margin: 5px 0; padding: 4px 6px; border-radius: 6px; }
+    .today { border: 2px solid #3b82f6; background: #eff6ff; }
+</style>
 </head>
 <body>
-    <h1>Lesson Countdown</h1>
+    <h1>📚 Lesson Countdown</h1>
     <div id="lesson">Detecting current lesson...</div>
     <div id="countdown">--:--:--</div>
+    <div id="funny"></div>
 
-    <button onclick="toggleTimetable()">Show Timetable</button>
+    <button onclick="toggleTimetable()">📅 Show Timetable</button>
     <div id="timetable"></div>
 
     <script>
         const timetable = {
-            1: [{ start: "07:45", end: "9:30", subject: "ITP" }, { start: "09:45", end: "11:30", subject: "SYT" }, { start: "11:35", end: "13:20", subject: "VENG" }, { start: "13:25", end: "14:15", subject: "RK" }],
+            1: [{ start: "07:45", end: "09:30", subject: "ITP" }, { start: "09:45", end: "11:30", subject: "SYT" }, { start: "11:35", end: "13:20", subject: "VENG" }, { start: "13:25", end: "14:15", subject: "RK" }],
             2: [{ start: "07:45", end: "09:30", subject: "ITP" }, { start: "09:45", end: "10:35", subject: "ETH" }, { start: "10:40", end: "11:30", subject: "D" }, { start: "13:25", end: "15:10", subject: "SWE" }, { start: "15:20", end: "16:10", subject: "INSY" }],
-            3: [{ start: "07:45", end: "09:30", subject: "BSP" }, { start: "09:45", end: "10:35", subject: "ITP" }, { start: "10:4ß", end: "11:30", subject: "SYT" }, { start: "11:35", end: "13:20", subject: "AM" }, { start: "14:20", end: "15:10", subject: "GGP" }, { start: "15:20", end: "16:10", subject: "RK" }, { start: "16:15", end: "18:00", subject: "GGP" }],
+            3: [{ start: "07:45", end: "09:30", subject: "BSP" }, { start: "09:45", end: "10:35", subject: "ITP" }, { start: "10:40", end: "11:30", subject: "SYT" }, { start: "11:35", end: "13:20", subject: "AM" }, { start: "14:20", end: "15:10", subject: "GGP" }, { start: "15:20", end: "16:10", subject: "RK" }, { start: "16:15", end: "18:00", subject: "GGP" }],
             4: [{ start: "07:45", end: "09:30", subject: "INSY" }, { start: "09:45", end: "10:40", subject: "NW2" }, { start: "10:40", end: "11:30", subject: "ITP" }, { start: "11:35", end: "13:20", subject: "E" }],
             5: [{ start: "07:45", end: "09:30", subject: "INSY" }, { start: "09:45", end: "10:35", subject: "SWE" }, { start: "10:40", end: "11:30", subject: "CFC" }, { start: "11:35", end: "12:25", subject: "NW2" }, { start: "13:25", end: "14:15", subject: "VENG" }, { start: "14:20", end: "16:10", subject: "WIR2" }]
         };
 
         const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+        const funnyMessages = [
+            "🐢 Time is crawling... hang in there!",
+            "☕ Coffee would be nice right now, huh?",
+            "📱 Don’t even think about opening TikTok!",
+            "🕺 You’re closer to freedom than you think!",
+            "🥱 Yaaawn... almost there!",
+            "🍫 Chocolate makes the last minutes faster."
+        ];
+
         function updateCountdown() {
             const now = new Date();
             const day = now.getDay();
             const todaySchedule = timetable[day];
+            const funnyBox = document.getElementById("funny");
+
+            funnyBox.textContent = "";
 
             if (!todaySchedule) {
-                document.getElementById("lesson").textContent = "No lessons scheduled today.";
+                document.getElementById("lesson").textContent = "🎉 No lessons today!";
                 document.getElementById("countdown").textContent = "--:--:--";
                 return;
             }
@@ -116,20 +118,28 @@
 
                 if (now >= start && now <= end) {
                     const diff = end - now;
+                    const total = end - start;
+                    const progress = (total - diff) / total;
+
                     const hrs = Math.floor(diff / (1000 * 60 * 60));
                     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                     const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-                    document.getElementById("lesson").textContent = `Current lesson: ${lesson.subject} (ends at ${lesson.end})`;
+                    document.getElementById("lesson").textContent = `⌛ Current lesson: ${lesson.subject} (ends at ${lesson.end})`;
                     document.getElementById("countdown").textContent =
                         `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+                    if (progress >= 0.5) {
+                        funnyBox.textContent = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+                    }
+
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                document.getElementById("lesson").textContent = "No current lesson.";
+                document.getElementById("lesson").textContent = "🚀 No current lesson.";
                 document.getElementById("countdown").textContent = "--:--:--";
             }
         }
@@ -140,10 +150,12 @@
                 container.innerHTML = `<div class="grid"></div>`;
                 const grid = container.querySelector(".grid");
 
+                const today = new Date().getDay();
+
                 for (let d = 1; d <= 5; d++) {
                     const lessons = timetable[d];
                     const dayDiv = document.createElement("div");
-                    dayDiv.className = "day-column";
+                    dayDiv.className = "day-column" + (d === today ? " today" : "");
 
                     const dayTitle = document.createElement("h3");
                     dayTitle.textContent = dayNames[d];
