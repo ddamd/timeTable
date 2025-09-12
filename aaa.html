@@ -63,6 +63,23 @@
     .day-column h3 { margin-top: 0; color: #1e40af; }
     .lesson { margin: 5px 0; padding: 4px 6px; border-radius: 6px; }
     .today { border: 2px solid #3b82f6; background: #eff6ff; }
+
+    /* Progress bar */
+    #progressContainer {
+        width: 80%;
+        height: 20px;
+        background: #e0e7ff;
+        border-radius: 10px;
+        margin: 20px auto;
+        overflow: hidden;
+    }
+    #progressBar {
+        height: 100%;
+        width: 0%;
+        background: #3b82f6;
+        border-radius: 10px;
+        transition: width 1s linear;
+    }
 </style>
 </head>
 <body>
@@ -70,6 +87,10 @@
     <div id="lesson">Detecting current lesson...</div>
     <div id="countdown">--:--:--</div>
     <div id="funny"></div>
+
+    <div id="progressContainer">
+        <div id="progressBar"></div>
+    </div>
 
     <button onclick="toggleTimetable()">📅 Show Timetable</button>
     <div id="timetable"></div>
@@ -91,7 +112,8 @@
             "📱 Zigaretten!!!!!",
             "🕺 Du bist kapp zum tod",
             "🥱 ICH BIN DURCH MIM LEBEN",
-            "🍫 Lizards sind suppi :)"
+            "🍫 Lizards sind suppi :)",
+            "🦆 Quack attack incoming!"
         ];
 
         function updateCountdown() {
@@ -99,8 +121,10 @@
             const day = now.getDay();
             const todaySchedule = timetable[day];
             const funnyBox = document.getElementById("funny");
+            const progressBar = document.getElementById("progressBar");
 
             funnyBox.textContent = "";
+            progressBar.style.width = "0%";
 
             if (!todaySchedule) {
                 document.getElementById("lesson").textContent = "🎉 No lessons today!";
@@ -129,6 +153,8 @@
                     document.getElementById("countdown").textContent =
                         `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
+                    progressBar.style.width = (progress * 100) + "%";
+
                     if (progress >= 0.5) {
                         funnyBox.textContent = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
                     }
@@ -141,6 +167,7 @@
             if (!found) {
                 document.getElementById("lesson").textContent = "🚀 No current lesson.";
                 document.getElementById("countdown").textContent = "--:--:--";
+                progressBar.style.width = "0%";
             }
         }
 
