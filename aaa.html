@@ -82,8 +82,13 @@
     }
 
     /* Video box */
-    #videoBox {
-        margin-top: 30px;
+    #videoBox { margin-top: 30px; }
+
+    /* Joke box */
+    #jokeBox {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #1e3a8a;
     }
 </style>
 </head>
@@ -101,6 +106,10 @@
     <div id="timetable"></div>
 
     <div id="videoBox"></div>
+
+    <!-- Joke button -->
+    <button onclick="loadJoke()">😂 Tell me a Joke</button>
+    <div id="jokeBox"></div>
 
     <script>
         const timetable = {
@@ -124,16 +133,8 @@
         ];
 
         const videos = [
-            "dQw4w9WgXcQ", // Just Dance
-            "qrO4YZeyl0I", // Bad Romance
-            "bESGLojNYSo", // Poker Face
-            "niqrrmev4mA", // Paparazzi
-            "EVBsypHzF3U", // Alejandro
-            "Ums9B1mhw9k", // Born This Way
-            "wV1FrqwZyKw", // The Edge of Glory
-            "oP8SrlbpJ5A", // Applause
-            "En2D_5TzXCA", // Stupid Love
-            "oB94lvJbETE"  // Rain on Me
+            "dQw4w9WgXcQ","qrO4YZeyl0I","bESGLojNYSo","niqrrmev4mA","EVBsypHzF3U",
+            "Ums9B1mhw9k","wV1FrqwZyKw","oP8SrlbpJ5A","En2D_5TzXCA","oB94lvJbETE"
         ];
 
         function updateCountdown() {
@@ -233,6 +234,20 @@
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen>
                 </iframe>`;
+        }
+
+        async function loadJoke() {
+            const res = await fetch("https://v2.jokeapi.dev/joke/Any");
+            const data = await res.json();
+            let jokeText = "";
+
+            if (data.type === "single") {
+                jokeText = data.joke;
+            } else {
+                jokeText = data.setup + " - " + data.delivery;
+            }
+
+            document.getElementById("jokeBox").textContent = jokeText;
         }
 
         loadRandomVideo();
