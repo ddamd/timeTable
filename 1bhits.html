@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson Countdown</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe, #93c5fd);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    text-align: center;
+    padding: 50px;
+    color: #1e3a8a;
+  }
+  @keyframes gradientShift {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+  }
+  h1 { font-size: 2.5em; margin-bottom: 20px; }
+  button {
+      margin: 10px;
+      padding: 12px 24px;
+      background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  button:hover { transform: scale(1.05); background: linear-gradient(90deg, #2563eb, #60a5fa); }
+  #app { display: none; }
+</style>
+</head>
+<body>
+  <!-- Selection Screen -->
+  <div id="selection">
+    <h1>Choose Your Class</h1>
+    <button onclick="startApp('4bhits')">4BHITS</button>
+    <button onclick="startApp('1bhits')">1BHITS</button>
+  </div>
+
+  <!-- App -->
+  <div id="app">
+    <h1>📚 Lesson Countdown</h1>
+    <div id="lesson">Detecting current lesson...</div>
+    <div id="countdown">--:--:--</div>
+    <div id="funny"></div>
+
+    <div id="progressContainer" style="width:80%;margin:20px auto;height:20px;background:#e0e7ff;border-radius:10px;overflow:hidden;">
+        <div id="progressBar" style="height:100%;width:0;background:#3b82f6;transition:width 1s linear;"></div>
+    </div>
+
+    <button onclick="toggleTimetable()">📅 Show Timetable</button>
+    <div id="timetable"></div>
+
+    <div id="videoBox"></div>
+    <button onclick="loadJoke()">😂 Tell me a Joke</button>
+    <div id="jokeBox"></div>
+  </div>
+
+<script>
+  // Timetables for both classes
+  const timetables = {
+    "4bhits": {
+      1: [{ start:"07:45",end:"09:30",subject:"ITP" },{ start:"09:45",end:"11:30",subject:"SYT" }],
+      2: [{ start:"07:45",end:"09:30",subject:"ITP" }]
+      // ... fill with your full 4BHITS schedule
+    },
+    "1bhits": {
+      1: [{ start:"08:00",end:"09:45",subject:"MATH" },{ start:"10:00",end:"11:30",subject:"ENG" }],
+      2: [{ start:"08:00",end:"09:45",subject:"BIO" }]
+      // ... fill with your full 1BHITS schedule
+    }
+  };
+
+  const dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const funnyMessages = ["🐢 Der Fisch fliegt sehr weit vom stamm","☕ Essen essen ist nicht gesund","🦆 Quack attack incoming!"];
+  const videos = ["dQw4w9WgXcQ","qrO4YZeyl0I","bESGLojNYSo"];
+
+  let activeTimetable = null;
+
+  function startApp(choice){
+    activeTimetable = timetables[choice];
+    document.getElementById("selection").style.display="none";
+    document.getElementById("app").style.display="block";
+    loadRandomVideo();
+    setInterval(updateCountdown,1000);
+  }
+
+  function updateCountdown(){
+    if (!activeTimetable) return;
+    const now=new Date(); const day=now.getDay();
+    const todaySchedule=activeTimetable[day];
+    const funnyBox=document.getElementById("funny");
+    const progressBar=document.getElementById("progressBar");
+    funnyBox.textContent=""; progressBar.style.width="0%";
+
+    if (!todaySchedule){
+      document.getElementById("lesson").textContent="🎉 No lessons today!";
+      document.getElementById("countdown").textContent="--:--:--"; return;
+    }
+
+    let found=false;
+    for (const lesson of todaySchedule){
+      const [sh,sm]=lesson.start.split(":").map(Number);
+      const [eh,em]=lesson.end.split(":").map(Number);
+      const start=new Date(now); start.setHours(sh,sm,0,0);
+      const end=new Date(now); end.setHours(eh,em,0,0);
+
+      if(now>=start && now<=end){
+        const diff=end-now, total=end-start;
+        const hrs=Math.floor(diff/3600000);
+        const mins=Math.floor((diff%3600000)/60000);
+        const secs=Math.floor((diff%60000)/1000);
+
+        document.getElementById("lesson").textContent=`⌛ Current lesson: ${lesson.subject} (ends at ${lesson.end})`;
+        document.getElementById("countdown").textContent=
+          `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+
+        progressBar.style.width=((total-diff)/total*100)+"%";
+        if ((total-diff)/total>=0.5) funnyBox.textContent=funnyMessages[Math.floor(Math.random()*funnyMessages.length)];
+        found=true; break;
+      }
+    }
+    if(!found){
+      document.getElementById("lesson").textContent="🚀 No current lesson.";
+      document.getElementById("countdown").textContent="--:--:--";
+    }
+  }
+
+  function toggleTimetable(){
+    const container=document.getElementById("timetable");
+    if(container.style.display==="none"||container.style.display===""){
+      container.innerHTML=`<div class="grid"></div>`;
+      const grid=container.querySelector(".grid");
+      const today=new Date().getDay();
+      for(let d=1;d<=5;d++){
+        const lessons=activeTimetable[d]||[];
+        const dayDiv=document.createElement("div");
+        dayDiv.className="day-column"+(d===today?" today":"");
+        const dayTitle=document.createElement("h3");
+        dayTitle.textContent=dayNames[d]; dayDiv.appendChild(dayTitle);
+        for(const l of lessons){
+          const el=document.createElement("div");
+          el.className="lesson"; el.textContent=`${l.start}-${l.end}: ${l.subject}`;
+          dayDiv.appendChild(el);
+        }
+        grid.appendChild(dayDiv);
+      }
+      container.style.display="block";
+    } else container.style.display="none";
+  }
+
+  function loadRandomVideo(){
+    const vid=videos[Math.floor(Math.random()*videos.length)];
+    document.getElementById("videoBox").innerHTML=
+      `<iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen></iframe>`;
+  }
+
+  async function loadJoke(){
+    const res=await fetch("https://v2.jokeapi.dev/joke/Any");
+    const data=await res.json();
+    document.getElementById("jokeBox").textContent = data.type==="single"?data.joke:data.setup+" - "+data.delivery;
+  }
+</script>
+</body>
+</html>
