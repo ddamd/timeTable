@@ -113,12 +113,47 @@
 
     <script>
         const timetable = {
-            1: [{ start: "07:45", end: "09:30", subject: "ITP" }, { start: "09:45", end: "11:30", subject: "SYT" }, { start: "11:35", end: "13:20", subject: "VENG" }, { start: "13:25", end: "14:15", subject: "RK" }],
-            2: [{ start: "07:45", end: "09:30", subject: "ITP" }, { start: "09:45", end: "10:35", subject: "ETH" }, { start: "10:40", end: "11:30", subject: "D" }, { start: "13:25", end: "15:10", subject: "SWE" }, { start: "15:20", end: "16:10", subject: "INSY" }],
-            3: [{ start: "07:45", end: "09:30", subject: "BSP" }, { start: "09:45", end: "10:35", subject: "ITP" }, { start: "10:40", end: "11:30", subject: "SYT" }, { start: "11:35", end: "13:20", subject: "AM" }, { start: "14:20", end: "15:10", subject: "GGP" }, { start: "15:20", end: "16:10", subject: "RK" }, { start: "16:15", end: "18:00", subject: "GGP" }],
-            4: [{ start: "07:45", end: "09:30", subject: "INSY" }, { start: "09:45", end: "10:40", subject: "NW2" }, { start: "10:40", end: "11:30", subject: "ITP" }, { start: "11:35", end: "13:20", subject: "E" }],
-            5: [{ start: "07:45", end: "09:30", subject: "INSY" }, { start: "09:45", end: "10:35", subject: "SWE" }, { start: "10:40", end: "11:30", subject: "CFC" }, { start: "11:35", end: "12:25", subject: "NW2" }, { start: "13:25", end: "14:15", subject: "VENG" }, { start: "14:20", end: "16:10", subject: "WIR2" }]
-        };
+    1: [
+        { start: "07:45", end: "08:35", subject: "AM" }, 
+        { start: "08:40", end: "09:30", subject: "SYT" }, 
+        { start: "09:45", end: "10:35", subject: "SYT" }, 
+        { start: "10:40", end: "11:30", subject: "ITS1.1" }, 
+        { start: "11:35", end: "13:20", subject: "D" }, 
+        { start: "14:20", end: "15:10", subject: "SEW" }, 
+        { start: "15:20", end: "16:10", subject: "SEW" }
+    ],
+    2: [
+        { start: "07:45", end: "09:30", subject: "NWTK" }, 
+        { start: "09:45", end: "10:35", subject: "E1" }, 
+        { start: "10:40", end: "11:30", subject: "AM" }, 
+        { start: "11:35", end: "13:20", subject: "D" }, 
+        { start: "14:20", end: "15:10", subject: "SEW" }, 
+        { start: "15:20", end: "16:10", subject: "SEW" }, 
+        { start: "16:15", end: "17:05", subject: "RK" }, 
+        { start: "17:10", end: "18:00", subject: "NW2" }
+    ],
+    3: [
+        { start: "07:45", end: "08:35", subject: "SYT" }, 
+        { start: "08:40", end: "09:30", subject: "SYT" }, 
+        { start: "09:45", end: "10:35", subject: "GGP" }, 
+        { start: "10:40", end: "11:30", subject: "MEDT" }, 
+        { start: "11:35", end: "12:25", subject: "MEDT" }, 
+        { start: "12:30", end: "13:20", subject: "AM" }, 
+        { start: "13:25", end: "14:15", subject: "D" }
+    ],
+    4: [
+        { start: "07:45", end: "09:30", subject: "GGP" }, 
+        { start: "09:45", end: "10:35", subject: "NW2" }, 
+        { start: "10:40", end: "11:30", subject: "RK" }, 
+        { start: "11:35", end: "13:20", subject: "SOPK" }
+    ],
+    5: [
+        { start: "07:45", end: "08:35", subject: "COPR" }, 
+        { start: "08:40", end: "09:30", subject: "COPR" }, 
+        { start: "11:35", end: "12:25", subject: "BESP" }
+    ]
+};
+
 
         const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
