@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Select Class</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe, #93c5fd);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    text-align: center;
+    padding: 100px;
+    color: #1e3a8a;
+  }
+  @keyframes gradientShift {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+  }
+  h1 { font-size: 2.5em; margin-bottom: 40px; }
+  button {
+      margin: 20px;
+      padding: 16px 32px;
+      background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-size: 1.2em;
+  }
+  button:hover { transform: scale(1.05); background: linear-gradient(90deg, #2563eb, #60a5fa); }
+</style>
+</head>
+<body>
+  <h1>Choose Your Class</h1>
+  <button onclick="location.href='4bhits.html'">4BHITS</button>
+  <button onclick="location.href='1bhits.html'">1BHITS</button>
+</body>
+</html>
